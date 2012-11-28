@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/charlie/python/PostPro/Form1.ui'
+# Form implementation generated from reading ui file '/home/in-triz/PostPro-Charlie-Bill/Form1.ui'
 #
-# Created: Sun Nov 25 16:15:10 2012
-#      by: PyQt4 UI code generator 4.9.1
+# Created: Wed Nov 28 18:57:20 2012
+#      by: PyQt4 UI code generator 4.9.3
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -17,10 +17,11 @@ except AttributeError:
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName(_fromUtf8("MainWindow"))
-        MainWindow.resize(1045, 546)
+        MainWindow.resize(1045, 548)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(_fromUtf8("image/shinke2n.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         MainWindow.setWindowIcon(icon)
+        MainWindow.setDocumentMode(False)
         MainWindow.setDockNestingEnabled(False)
         MainWindow.setUnifiedTitleAndToolBarOnMac(True)
         self.centralwidget = QtGui.QWidget(MainWindow)
@@ -108,6 +109,8 @@ class Ui_MainWindow(object):
         self.kpixmapregionselectorwidget.setAutoFillBackground(False)
         self.kpixmapregionselectorwidget.setPixmap(QtGui.QPixmap(_fromUtf8("image/shinke2n.png")))
         self.kpixmapregionselectorwidget.setObjectName(_fromUtf8("kpixmapregionselectorwidget"))
+        self.pushButton = QtGui.QPushButton(self.splitter)
+        self.pushButton.setObjectName(_fromUtf8("pushButton"))
         self.horizontalLayout_2.addWidget(self.splitter)
         self.verticalSlider_2 = QtGui.QSlider(self.tab)
         self.verticalSlider_2.setOrientation(QtCore.Qt.Vertical)
@@ -399,12 +402,10 @@ class Ui_MainWindow(object):
         self.horizontalLayout.addWidget(self.tabWidget)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1045, 23))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1045, 25))
         self.menubar.setObjectName(_fromUtf8("menubar"))
         self.menuFichier = QtGui.QMenu(self.menubar)
         self.menuFichier.setObjectName(_fromUtf8("menuFichier"))
-        self.menuA_propos = QtGui.QMenu(self.menubar)
-        self.menuA_propos.setObjectName(_fromUtf8("menuA_propos"))
         self.menuAide = QtGui.QMenu(self.menubar)
         self.menuAide.setObjectName(_fromUtf8("menuAide"))
         MainWindow.setMenuBar(self.menubar)
@@ -421,6 +422,10 @@ class Ui_MainWindow(object):
         self.actionOuvrir_et_pr_visualiser.setObjectName(_fromUtf8("actionOuvrir_et_pr_visualiser"))
         self.actionEnregistrer_sous = QtGui.QAction(MainWindow)
         self.actionEnregistrer_sous.setObjectName(_fromUtf8("actionEnregistrer_sous"))
+        self.actionA_Propos = QtGui.QAction(MainWindow)
+        self.actionA_Propos.setObjectName(_fromUtf8("actionA_Propos"))
+        self.actionLecteur_Audio = QtGui.QAction(MainWindow)
+        self.actionLecteur_Audio.setObjectName(_fromUtf8("actionLecteur_Audio"))
         self.menuFichier.addAction(self.actionOuvrir)
         self.menuFichier.addSeparator()
         self.menuFichier.addAction(self.actionOuvrir_et_pr_visualiser)
@@ -430,8 +435,9 @@ class Ui_MainWindow(object):
         self.menuFichier.addSeparator()
         self.menuFichier.addSeparator()
         self.menuFichier.addAction(self.actionQuitter)
+        self.menuAide.addAction(self.actionA_Propos)
+        self.menuAide.addAction(self.actionLecteur_Audio)
         self.menubar.addAction(self.menuFichier.menuAction())
-        self.menubar.addAction(self.menuA_propos.menuAction())
         self.menubar.addAction(self.menuAide.menuAction())
 
         self.retranslateUi(MainWindow)
@@ -443,6 +449,7 @@ class Ui_MainWindow(object):
         self.BouttonCalcul.setText(QtGui.QApplication.translate("MainWindow", "Calculer", None, QtGui.QApplication.UnicodeUTF8))
         self.BouttonEffacer.setText(QtGui.QApplication.translate("MainWindow", "Effacer", None, QtGui.QApplication.UnicodeUTF8))
         self.BoutonPrevusalisation.setText(QtGui.QApplication.translate("MainWindow", "Prévisualiser", None, QtGui.QApplication.UnicodeUTF8))
+        self.pushButton.setText(QtGui.QApplication.translate("MainWindow", "PushButton", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QtGui.QApplication.translate("MainWindow", "Calculer", None, QtGui.QApplication.UnicodeUTF8))
         self.groupBox.setTitle(QtGui.QApplication.translate("MainWindow", "Paramètres Machine", None, QtGui.QApplication.UnicodeUTF8))
         self.comboBoxUnite.setItemText(0, QtGui.QApplication.translate("MainWindow", "mm", None, QtGui.QApplication.UnicodeUTF8))
@@ -470,13 +477,14 @@ class Ui_MainWindow(object):
         self.label_6.setText(QtGui.QApplication.translate("MainWindow", "Ender", None, QtGui.QApplication.UnicodeUTF8))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), QtGui.QApplication.translate("MainWindow", "Paramètres", None, QtGui.QApplication.UnicodeUTF8))
         self.menuFichier.setTitle(QtGui.QApplication.translate("MainWindow", "Fichier", None, QtGui.QApplication.UnicodeUTF8))
-        self.menuA_propos.setTitle(QtGui.QApplication.translate("MainWindow", "A propos", None, QtGui.QApplication.UnicodeUTF8))
         self.menuAide.setTitle(QtGui.QApplication.translate("MainWindow", "Aide", None, QtGui.QApplication.UnicodeUTF8))
         self.actionOuvrir.setText(QtGui.QApplication.translate("MainWindow", "Ouvrir", None, QtGui.QApplication.UnicodeUTF8))
         self.actionEnregistrer.setText(QtGui.QApplication.translate("MainWindow", "Enregistrer", None, QtGui.QApplication.UnicodeUTF8))
         self.actionQuitter.setText(QtGui.QApplication.translate("MainWindow", "Quitter", None, QtGui.QApplication.UnicodeUTF8))
         self.actionOuvrir_et_pr_visualiser.setText(QtGui.QApplication.translate("MainWindow", "Ouvrir et prévisualiser", None, QtGui.QApplication.UnicodeUTF8))
         self.actionEnregistrer_sous.setText(QtGui.QApplication.translate("MainWindow", "Enregistrer sous", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionA_Propos.setText(QtGui.QApplication.translate("MainWindow", "A Propos....", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionLecteur_Audio.setText(QtGui.QApplication.translate("MainWindow", "Lecteur Audio", None, QtGui.QApplication.UnicodeUTF8))
 
 from PyKDE4.kdeui import KPixmapRegionSelectorWidget
 from qslid import Qslid
