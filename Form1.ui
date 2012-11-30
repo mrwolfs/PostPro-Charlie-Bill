@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1045</width>
+    <width>1186</width>
     <height>548</height>
    </rect>
   </property>
@@ -55,7 +55,7 @@
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_2">
             <item>
-             <widget class="QTextEdit" name="InputTextEdit">
+             <widget class="scrolltext" name="InputTextEdit">
               <property name="sizePolicy">
                <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
                 <horstretch>0</horstretch>
@@ -70,13 +70,16 @@
                 <bold>false</bold>
                </font>
               </property>
+              <property name="verticalScrollBarPolicy">
+               <enum>Qt::ScrollBarAlwaysOff</enum>
+              </property>
               <property name="acceptRichText">
                <bool>true</bool>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="Qslid" name="verticalSlider">
+             <widget class="QSlider" name="verticalSlider">
               <property name="orientation">
                <enum>Qt::Vertical</enum>
               </property>
@@ -179,7 +182,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QTextEdit" name="TransformTextEdit">
+             <widget class="scrolltext" name="TransformTextEdit">
               <property name="sizePolicy">
                <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
                 <horstretch>0</horstretch>
@@ -193,6 +196,9 @@
                 <italic>false</italic>
                 <bold>false</bold>
                </font>
+              </property>
+              <property name="verticalScrollBarPolicy">
+               <enum>Qt::ScrollBarAlwaysOff</enum>
               </property>
              </widget>
             </item>
@@ -782,7 +788,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1045</width>
+     <width>1186</width>
      <height>25</height>
     </rect>
    </property>
@@ -854,9 +860,9 @@
    <header>kpixmapregionselectorwidget.h</header>
   </customwidget>
   <customwidget>
-   <class>Qslid</class>
-   <extends>QSlider</extends>
-   <header>qslid.h</header>
+   <class>scrolltext</class>
+   <extends>QTextEdit</extends>
+   <header>scrolltext.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

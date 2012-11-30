@@ -15,6 +15,7 @@ import Ui_test
 import os
 from PyQt4 import QtCore, QtGui
 import OGL
+import AudioPlayer
 
 class MainWindow(QMainWindow, Ui_MainWindow):
     """
@@ -29,7 +30,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         
 
 
-
     def __init__(self, parent = None):
         """
         Constructor
@@ -40,9 +40,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.deplacement = "G90"
         self.PlandeTravail = "G17"
         self.coordonnees = "G54"
-        self.connect(self.verticalSlider, QtCore.SIGNAL("resize()"), self.resizedW)
+        self.connect(self.InputTextEdit, QtCore.SIGNAL("scrol(int)"),  self.scrollInput)
+        self.connect(self.TransformTextEdit, QtCore.SIGNAL("scrol(int)"),  self.scrollTransform)
         self.BoutonPrevusalisation.setEnabled(False)
-        
 
     @pyqtSignature("")
     def on_BouttonEffacer_clicked(self):
@@ -72,16 +72,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """
         Slot documentation goes here.
         """
+        self.TransformTextEdit.clear
         self.Mode = 0
         self.listetest=[]
         self.Stock_C = 0
         self.listeCalcul = []
         self.progressBar.setValue(0)
         self.progressBar.setMaximum(len(self.liste))
+        #------------------------------------------------------Ajoute le Header----------------------------------------------#
+        d = self.HeadertextEdit.toPlainText()
+        listeheader = d.split("\n")
+        for a in listeheader:
+            self.listeCalcul.append(a)
         
-        #-------------------------------------Vitesse Rapide pour Simulation--------------------------------------#
-        if self.checkBox.isChecked() == True:
-            self.listeHeader.append("G1 " + "F10000000000")
+
         #---------------------------------\\\\\\------Traitement des données------///////------------------------------#
         #-----------------------------------------------------Prend l'outil----------------------------------------------------#
      
@@ -95,17 +99,23 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.listeCalcul .append("M3")
                 self.listeCalcul .append("M0")
                 
-            if self.checkBox.isChecked() == False:
-                if "FEDRAT/ " in ligne:
+            if "FEDRAT/ " in ligne:   
+                if self.checkBox.isChecked() == False:
                     ligne=ligne.replace("FEDRAT/ ", "")
                     ligne=ligne.replace(",MMPM", "")
                     self.listeCalcul .append("G1 F" + (ligne))
+                else:
+                    #-------------------------------------Vitesse Rapide pour Simulation--------------------------------------#
+                    self.listeCalcul.append("G1 " + "F100000")
                     
             #----------------------------------------------------Extraction-----------------------------------------------------#
             if "GOTO" in ligne:
                 self.listeCalcul .append(self.Extraction(ligne))
-               
-
+            #-------------------------------------------------Ajout de Ender---------------------------------------------------#
+        d = self.EnderTextEdit.toPlainText()
+        listeEnder = d.split("\n")
+        for a in listeEnder:
+            self.listeCalcul.append(a)
         #-------------------------------------------Affiche les  élement de la liste-------------------------------------#
         self.verticalSlider_2.setMaximum(len(self.listeCalcul))
         self.AfficheTransform()
@@ -215,34 +225,43 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         
         
     """----------------------------------------------------------------------------------------------------Mise a jour quand Resize----------------------------------------------------------------------------------------------"""
-    def resizedW(self):
-        self.update()
+    def resizeEvent(self, event):
         self.NbrLigneAffiche = int(self.InputTextEdit.height()/13.5)
         self.AfficheInput()
         self.AfficheTransform()
-            
+             
+    """---------------------------------------------------------------------------------------------------------Scroll des TextEdit------------------------------------------------------------------------------------------------------------"""
+    def scrollInput(self,  intArg):
+            self.verticalSlider.setValue(self.verticalSlider.value() -  intArg)
+    def scrollTransform(self,  intArg):
+            self.verticalSlider_2.setValue(self.verticalSlider_2.value() -  intArg)
         
-       
-        
+
+      
     """--------------------------------------------------------------------------------------------------Gestion des slider------------------------------------------------------------------------------------------"""
     @pyqtSignature("int")
     def on_verticalSlider_valueChanged(self, value):
         """
         Slot documentation goes here.
         """
-        self.AfficheInput()
-        self.spinBox.setMaximum(len(self.liste))
-        self.spinBox.setValue(self.verticalSlider.value())
-
+        try:
+            self.AfficheInput()
+            self.spinBox.setMaximum(len(self.liste))
+            self.spinBox.setValue(self.verticalSlider.value())
+        except AttributeError:
+          pass
             
     @pyqtSignature("int")
     def on_verticalSlider_2_valueChanged(self, value):
         """
         Slot documentation goes here.
         """
-        self.AfficheTransform()
-        self.spinBox_2.setMaximum(len(self.listeCalcul ))
-        self.spinBox_2.setValue(self.verticalSlider_2.value())
+        try:
+            self.AfficheTransform()
+            self.spinBox_2.setMaximum(len(self.liste))
+            self.spinBox_2.setValue(self.verticalSlider_2.value())
+        except AttributeError:
+          pass
 
     """---------------------------------------------------------------------------------------------------Gestion des spinBox-------------------------------------------------------------------------------------------"""
     @pyqtSignature("int")
@@ -268,7 +287,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """
         Slot documentation goes here.
         """
-        # TODO: not implemented yet
+        #--------------------------------------Ouvre la fenetre Ui a Propos--------------------------------#
         self.Dialog = QtGui.QWidget()
         self.ui = Ui_APropo.Ui_Dialog()
         self.ui.setupUi(self.Dialog)
@@ -279,7 +298,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """
         Slot documentation goes here.
         """
-        # TODO: not implemented yet
+        self.W = QtGui.QWidget()
+        self.aud = AudioPlayer.AudioPlayer()
+        self.aud.show()
         
 
     
@@ -383,7 +404,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         try:
             #--------------------------------Selection du Fichier, ouverture en Ecriture-----------------------------#
             filename=QFileDialog.getSaveFileName(self, "Explorateur de Fichier – Enregistrer un Fichier", "", "Ngc (*.ngc)")
-            fichier = open(filename, "w")
+            if ".ngc" in filename:
+                ext = ""
+            else:
+                ext = ".ngc"
+            fichier = open(filename + ext, "w")
             #-----------------------------Ajoute ligne à ligne chaque element de la liste----------------------------#
             for g in range(len(self.listeCalcul )):
                 fichier.write(str(self.listeCalcul [g]) + "\n")
@@ -412,43 +437,26 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         J = Decimal(self.listeValeur[4])
         K = Decimal(self.listeValeur[5])
 
-
-
-
         #------------------------------------Caclul C---------------------------------#
         try:
-            if 150 < math.degrees(math.atan2(self.I1, self.J1)):
-                if -150 > math.degrees(math.atan2(I, J)): #----==> tourne à droite, Incrémente stock C par ajouts, Passe en mode 1
-                    self.Mode = 1
+            if 150 < math.degrees(math.atan2(self.J1, self.I1)):
+                if -150 > math.degrees(math.atan2(J, I)): #----==> tourne à droite, Incrémente stock C par ajouts, Passe en mode 1
                     self.Stock_C = self.Stock_C +360
-                   
-                
-            if -150 > math.degrees(math.atan2(self.I1, self.J1)):
-                if 150 < math.degrees(math.atan2(I, J)): #----==> tourne à gauche, Décrémente stock C par soustraction, Passe en mode 1
-                    self.Mode = 1
-                    self.Stock_C = self.Stock_C -360    
-                       
-                        
-            if self.Mode == 0:
-                formule = ((math.degrees(math.atan2(I, J))))
-                C = formule
-            
-            if self.Mode == 1:
-                formule = ((math.degrees(math.atan2(I, J))))
-                C = self.Stock_C + formule
 
+            if -150 > math.degrees(math.atan2(self.J1, self.I1)):
+                if 150 < math.degrees(math.atan2(J, I)): #----==> tourne à gauche, Décrémente stock C par soustraction, Passe en mode 1
+                    self.Stock_C = self.Stock_C -360    
+
+            C = (self.Stock_C + math.degrees(math.atan2(J, I)))
         except AttributeError:
-            formule = ((math.degrees(math.atan2(I, J))))
-            C =  formule
+            C = math.degrees(math.atan2(J, I))
                 
-             
 
         C = str(round(C, 3))
-        self.formule1 = formule
         self.I1 = I
         self.J1 = J
         #------------------------------------Caclul A---------------------------------#
-        A = math.degrees(math.atan2(-math.sqrt(I*I+J*J),  K))
+        A = - math.degrees(math.atan2(K,  math.sqrt(I*I+J*J)))
         A = str(round(A, 3))
         #------------------------------------Caclul X---------------------------------#
         X = str(round(X, 3))
